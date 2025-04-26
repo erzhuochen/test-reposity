@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.ClazzMapper">
+    <update id="update">
+        update clazz
+        <set>
+            <if test="subject != null">
+                subject = #{subject},
+            </if>
+            name = #{name}, room = #{room}, begin_date = #{beginDate}, end_date = #{endDate}, master_id = #{masterId}, update_time = #{updateTime}
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="list" resultType="com.itheima.pojo.Clazz">
+        select c.id, c.name, c.room, c.begin_date, c.end_date, c.master_id, e.name masterName, c.create_time, c.update_time, c.subject
+        from clazz c left join emp e on c.master_id = e.id
+        <where>
+            <if test="name != null and name != ''">
+                and c.name like concat('%', #{name}, '%')
+            </if>
+            <if test="begin != null and end != null">
+                and c.end_date between #{begin} and #{end}
+            </if>
+        </where>
+
+    </select>
+</mapper>
